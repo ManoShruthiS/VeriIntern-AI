@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VeriIntern-AI — Fraud Detection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+<!-- GRID BACKGROUND -->
+<div class="grid-bg"></div>
+<div class="scan-line"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <div class="logo-icon">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2L4 8v8c0 7.18 5.14 13.9 12 15.5C22.86 29.9 28 23.18 28 16V8L16 2z" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <path d="M11 16l3.5 3.5L21 11" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <span class="logo-text">VeriIntern<span class="accent">-AI</span></span>
+      <span class="logo-sub">Intelligent Fraud Detection</span>
+    </div>
+  </div>
+  <div class="header-badges">
+    <span class="badge">ML-Powered</span>
+    <span class="badge">Multi-Layer</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">⚡ Protect your career</div>
+  <h1>Detect Fake Internship<br/><span class="accent">Offers Instantly</span></h1>
+  <p class="hero-sub">Paste any internship offer. Our AI cross-checks text patterns, company legitimacy, and URL safety — all in seconds.</p>
+</section>
+
+<!-- MAIN CARD -->
+<main>
+  <div class="card analyzer-card">
+    <div class="card-header">
+      <span class="step-label">ANALYZE OFFER</span>
+      <div class="status-dot" id="statusDot"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="offerText">📋 Paste the internship offer text <span class="req">*</span></label>
+      <textarea id="offerText" placeholder="Paste the full internship offer message here — email, WhatsApp message, job post, etc.&#10;&#10;Example: 'Congratulations! You are selected for TechGrow internship. Pay ₹999 registration fee to confirm...'"></textarea>
+      <div class="char-count"><span id="charCount">0</span> characters</div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group half">
+        <label for="companyName">🏢 Company Name <span class="hint">(optional — auto-detected)</span></label>
+        <input type="text" id="companyName" placeholder="e.g. Google, TCS, Infosys" />
+      </div>
+      <div class="form-group half">
+        <label for="urlInput">🌐 URL / Website <span class="hint">(optional — auto-detected)</span></label>
+        <input type="text" id="urlInput" placeholder="e.g. https://careers.google.com" />
+      </div>
+    </div>
+
+    <button class="analyze-btn" id="analyzeBtn" onclick="analyzeOffer()">
+      <span class="btn-icon">🔍</span>
+      <span class="btn-text">Analyze Offer</span>
+      <span class="btn-loader" id="btnLoader"></span>
+    </button>
+
+    <!-- SAMPLE BUTTONS -->
+    <div class="samples">
+      <span class="samples-label">Try a sample:</span>
+      <button class="sample-btn fraud-sample" onclick="loadSample('fraud')">⚠️ Fraud Example</button>
+      <button class="sample-btn legit-sample" onclick="loadSample('legit')">✅ Legit Example</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SECTION -->
+  <div id="resultsSection" class="results-section hidden">
+
+    <!-- VERDICT BANNER -->
+    <div class="verdict-banner" id="verdictBanner">
+      <div class="verdict-icon" id="verdictIcon"></div>
+      <div class="verdict-text">
+        <div class="verdict-label" id="verdictLabel"></div>
+        <div class="verdict-confidence" id="verdictConfidence"></div>
+      </div>
+      <div class="confidence-ring">
+        <svg viewBox="0 0 80 80" class="ring-svg">
+          <circle cx="40" cy="40" r="32" class="ring-bg"/>
+          <circle cx="40" cy="40" r="32" class="ring-fill" id="ringFill"/>
+        </svg>
+        <span class="ring-pct" id="ringPct">0%</span>
+      </div>
+    </div>
+
+    <!-- SCORE BREAKDOWN -->
+    <div class="card score-card">
+      <h3 class="card-title">📊 Score Breakdown</h3>
+      <div class="score-grid">
+        <div class="score-item">
+          <div class="score-item-label">🤖 ML Model</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" id="mlBar"></div>
+          </div>
+          <div class="score-value" id="mlValue">—</div>
+          <div class="score-weight">Weight: 50%</div>
+        </div>
+        <div class="score-item">
+          <div class="score-item-label">🏢 Company Check</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" id="companyBar"></div>
+          </div>
+          <div class="score-value" id="companyValue">—</div>
+          <div class="score-weight">Weight: 25%</div>
+        </div>
+        <div class="score-item">
+          <div class="score-item-label">🌐 URL Safety</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" id="urlBar"></div>
+          </div>
+          <div class="score-value" id="urlValue">—</div>
+          <div class="score-weight">Weight: 25%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAILS GRID -->
+    <div class="details-grid">
+      <div class="card detail-card" id="companyCard">
+        <div class="detail-header">
+          <span class="detail-icon">🏢</span>
+          <span class="detail-title">Company</span>
+          <span class="detail-badge" id="companyBadge"></span>
+        </div>
+        <div class="detail-name" id="companyName2"></div>
+        <div class="detail-reason" id="companyReason"></div>
+      </div>
+      <div class="card detail-card" id="urlCard">
+        <div class="detail-header">
+          <span class="detail-icon">🌐</span>
+          <span class="detail-title">URL</span>
+          <span class="detail-badge" id="urlBadge"></span>
+        </div>
+        <div class="detail-name" id="urlName"></div>
+        <div class="detail-reason" id="urlReason"></div>
+      </div>
+    </div>
+
+    <!-- EXPLANATIONS -->
+    <div class="card explanation-card">
+      <h3 class="card-title">🧠 Why this verdict?</h3>
+      <div id="explanationsList" class="explanations-list"></div>
+
+      <!-- TEXT SIGNALS -->
+      <div id="signalsSection">
+        <div id="fraudKeywordsSection" class="signals-group hidden">
+          <div class="signals-title fraud-title">⚠️ Suspicious Phrases Detected</div>
+          <div id="fraudKeywordsList" class="keyword-tags"></div>
+        </div>
+        <div id="legitSignalsSection" class="signals-group hidden">
+          <div class="signals-title legit-title">✅ Legitimate Signals Found</div>
+          <div id="legitSignalsList" class="keyword-tags"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESET -->
+    <button class="reset-btn" onclick="resetForm()">↩ Analyze Another Offer</button>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>VeriIntern-AI — Built with Python, Flask, Scikit-learn &amp; ❤️ by Team VeriIntern</p>
+  <p class="footer-sub">Mano Shruthi S · Bala Sowndarya · Kowsalya V · Kaviya Varshini S</p>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
