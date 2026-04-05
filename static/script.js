@@ -1,226 +1,302 @@
-/* VeriIntern-AI — Frontend Logic */
+// VeriIntern AI — Frontend Logic
+// handles UI state, API calls, and rendering results
 
-const FRAUD_SAMPLE = `Congratulations! You have been selected for a remote internship at TechGrow Solutions. No interview required. You will earn ₹15,000/month working from home. 
+const SAMPLES = {
+  fraud: {
+    text: `Congratulations! You have been selected for a remote internship at TechGrow Solutions. No interview required. You will earn Rs.15,000/month working from home.
 
-To confirm your seat and receive your offer letter, please pay a registration fee of ₹999 within 24 hours. 
+To confirm your seat and receive your offer letter, please pay a registration fee of Rs.999 within 24 hours. Transfer to UPI ID: techgrowjobs@upi
 
-Transfer to: UPI ID - techgrowjobs@upi
-Limited seats only — offer expires tonight!
-
-Visit: http://techgrow-internship.xyz/register`;
-
-const LEGIT_SAMPLE = `Google is hiring Software Development interns for Summer 2025!
+Limited seats only — offer expires tonight. Visit http://techgrow-internship.xyz/register to complete payment.`,
+    company: 'TechGrow Solutions',
+    url: 'http://techgrow-internship.xyz/register'
+  },
+  legit: {
+    text: `Google is hiring Software Development interns for Summer 2025.
 
 Join our engineering team in Bangalore and work on real-world projects alongside experienced engineers.
 
-Details:
-- Role: Software Development Intern
-- Duration: 3 months (May–July 2025)
-- Stipend: ₹25,000/month
-- Location: Bangalore, India
-- Selection: Resume screening + 2 technical rounds + HR discussion
+Role: Software Development Intern
+Duration: 3 months (May to July 2025)
+Stipend: Rs.25,000 per month
+Location: Bangalore, India
+Selection process: Resume screening, two technical rounds, and an HR discussion
 
-No registration fee. Apply through our official portal only.
-Deadline: April 15, 2025
+No registration fee. Apply through the official portal only.
+Application deadline: April 15, 2025
+Apply at: https://careers.google.com/jobs/results/internship-2025`,
+    company: 'Google',
+    url: 'https://careers.google.com/jobs/results/internship-2025'
+  }
+};
 
-Apply at: https://careers.google.com/jobs/results/internship-2025`;
+let analysisInProgress = false;
 
-// ─── Sample loader ─────────────────────────────────────────────────────────
+// update character count as user types
+document.getElementById('offerText').addEventListener('input', function() {
+  const len = this.value.length;
+  document.getElementById('charCount').textContent = len.toLocaleString() + ' characters';
+});
+
 function loadSample(type) {
-  document.getElementById('offerText').value = type === 'fraud' ? FRAUD_SAMPLE : LEGIT_SAMPLE;
-  document.getElementById('companyName').value = type === 'fraud' ? 'TechGrow Solutions' : 'Google';
-  document.getElementById('urlInput').value = type === 'fraud'
-    ? 'http://techgrow-internship.xyz/register'
-    : 'https://careers.google.com/jobs/results/internship-2025';
-  updateCharCount();
-  // Hide previous results
-  document.getElementById('resultsSection').classList.add('hidden');
+  const s = SAMPLES[type];
+  document.getElementById('offerText').value = s.text;
+  document.getElementById('companyName').value = s.company;
+  document.getElementById('urlInput').value = s.url;
+
+  // update char count
+  document.getElementById('charCount').textContent = s.text.length.toLocaleString() + ' characters';
+
+  // reset results
+  showState('empty');
 }
 
-// ─── Character counter ────────────────────────────────────────────────────
-function updateCharCount() {
-  const len = document.getElementById('offerText').value.length;
-  document.getElementById('charCount').textContent = len.toLocaleString();
-}
-document.getElementById('offerText').addEventListener('input', updateCharCount);
-
-// ─── Main analysis function ───────────────────────────────────────────────
 async function analyzeOffer() {
+  if (analysisInProgress) return;
+
   const offerText   = document.getElementById('offerText').value.trim();
   const companyName = document.getElementById('companyName').value.trim();
   const url         = document.getElementById('urlInput').value.trim();
+  const skipScraping = document.getElementById('skipScraping').checked;
 
   if (!offerText) {
-    shakeElement('offerText');
+    const textarea = document.getElementById('offerText');
+    textarea.style.borderColor = 'var(--danger)';
+    textarea.style.animation = 'fieldShake 0.4s ease';
+    setTimeout(() => {
+      textarea.style.borderColor = '';
+      textarea.style.animation = '';
+    }, 700);
     return;
   }
 
   setLoading(true);
+  showState('loading');
+  animateLoadingSteps(skipScraping);
 
   try {
-    const response = await fetch('/analyze', {
+    const res = await fetch('/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ offer_text: offerText, company_name: companyName, url: url })
+      body: JSON.stringify({
+        offer_text: offerText,
+        company_name: companyName,
+        url: url,
+        skip_scraping: skipScraping
+      })
     });
 
-    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+      throw new Error(err.error || `Server returned ${res.status}`);
+    }
 
-    const data = await response.json();
+    const data = await res.json();
     if (data.error) throw new Error(data.error);
 
-    displayResults(data);
+    renderResults(data);
+    showState('results');
+
   } catch (err) {
-    showError(err.message || 'Analysis failed. Make sure the Flask server is running.');
+    showState('empty');
+    alert('Analysis failed: ' + (err.message || 'Unknown error. Is the Flask server running?'));
   } finally {
     setLoading(false);
   }
 }
 
-// ─── Display results ──────────────────────────────────────────────────────
-function displayResults(data) {
-  const isFraud = data.verdict === 'FRAUD';
+function renderResults(data) {
+  const isFraud = data.is_fraud;
   const conf = data.confidence_percent;
-
-  // Show section
-  const section = document.getElementById('resultsSection');
-  section.classList.remove('hidden');
-
-  // ── Verdict banner ──
-  const banner = document.getElementById('verdictBanner');
-  banner.className = `verdict-banner ${isFraud ? 'fraud' : 'legit'}`;
-
-  document.getElementById('verdictIcon').textContent = isFraud ? '🚨' : '✅';
-  document.getElementById('verdictLabel').textContent = isFraud ? 'FRAUD DETECTED' : 'LOOKS LEGITIMATE';
-  document.getElementById('verdictConfidence').textContent =
-    `${conf}% confidence · Score: ${(data.combined_fraud_probability * 100).toFixed(1)}% fraud probability`;
-
-  // Confidence ring animation
-  const ringFill = document.getElementById('ringFill');
-  const circumference = 201;
-  const offset = circumference - (conf / 100) * circumference;
-  setTimeout(() => { ringFill.style.strokeDashoffset = offset; }, 100);
-  animateCounter('ringPct', 0, conf, '%', 1000);
-
-  // ── Score bars ──
+  const fraudPct = (data.combined_fraud_probability * 100).toFixed(1) + '%';
   const scores = data.component_scores;
-  const mlFraud = +(scores.ml_fraud_probability * 100).toFixed(1);
-  const compLegit = +(scores.company_legitimacy * 100).toFixed(1);
-  const urlSafe = +(scores.url_safety * 100).toFixed(1);
 
-  setBar('mlBar',      mlFraud,   true,  'mlValue',      mlFraud + '% fraud prob');
-  setBar('companyBar', compLegit, false, 'companyValue', compLegit + '% legit');
-  setBar('urlBar',     urlSafe,   false, 'urlValue',     urlSafe + '% safe');
+  // verdict bar
+  const verdictBar = document.getElementById('verdictBar');
+  verdictBar.className = 'verdict-bar ' + (isFraud ? 'fraud' : 'legit');
+  document.getElementById('verdictStatus').textContent = isFraud ? 'FRAUD DETECTED' : 'LOOKS LEGITIMATE';
+  document.getElementById('verdictSub').textContent = conf + '% confidence in this verdict';
+  document.getElementById('verdictScore').textContent = fraudPct;
 
-  // ── Company card ──
-  document.getElementById('companyName2').textContent = data.company.name || 'Not detected';
-  document.getElementById('companyReason').textContent = data.company.reason;
-  document.getElementById('companyBadge').textContent = data.company.status;
-  document.getElementById('companyBadge').className = `detail-badge badge-${data.company.status}`;
+  // score cards
+  renderScoreBar('ml', scores.ml_fraud_probability, true);
+  renderScoreBar('agent', 1 - scores.agent_legitimacy, true);   // invert: legitimacy -> fraud risk
+  renderScoreBar('company', 1 - scores.company_legitimacy, true);
+  renderScoreBar('url', 1 - scores.url_safety, true);
 
-  // ── URL card ──
-  document.getElementById('urlName').textContent = data.url.value || 'Not found';
-  document.getElementById('urlReason').textContent = data.url.reason;
-  document.getElementById('urlBadge').textContent = data.url.status;
-  document.getElementById('urlBadge').className = `detail-badge badge-${data.url.status}`;
+  // agent log
+  const terminal = document.getElementById('agentTerminal');
+  const logs = data.agent?.agent_log || [];
 
-  // ── Explanations ──
-  const list = document.getElementById('explanationsList');
-  list.innerHTML = '';
-  (data.explanations || []).forEach(exp => {
-    const div = document.createElement('div');
-    div.className = 'explanation-item';
-    div.textContent = exp;
-    list.appendChild(div);
-  });
+  if (logs.length > 0) {
+    terminal.innerHTML = logs.map(entry => {
+      const level = entry.level || 'info';
+      return `<div class="log-line ${level}">
+        <span class="log-time">[${entry.time}]</span>
+        <span class="log-msg">${escHtml(entry.message)}</span>
+      </div>`;
+    }).join('');
+    // scroll to bottom
+    terminal.scrollTop = terminal.scrollHeight;
+  } else {
+    terminal.innerHTML = '<div class="terminal-placeholder">Web agent was not run (fast mode).</div>';
+  }
 
-  // ── Text signals ──
+  // agent stats
+  const stats = data.agent?.stats || {};
+  if (stats.positive !== undefined) {
+    document.getElementById('agentStats').textContent =
+      `+${stats.positive} positive  -${stats.negative} negative  ~${stats.neutral} neutral`;
+  }
+
+  // agent findings
+  const findingsList = document.getElementById('findingsList');
+  const findings = data.agent?.findings || [];
+  if (findings.length > 0) {
+    findingsList.innerHTML = findings.map(f => {
+      let badgeClass, badgeText;
+      if (f.positive === true) {
+        badgeClass = 'badge-positive';
+        badgeText = 'Pass';
+      } else if (f.positive === false && !f.neutral) {
+        badgeClass = 'badge-negative';
+        badgeText = 'Fail';
+      } else {
+        badgeClass = 'badge-neutral';
+        badgeText = 'Neutral';
+      }
+      return `<div class="finding-row">
+        <span class="finding-label">${escHtml(f.label)}</span>
+        <span class="finding-detail">${escHtml(f.detail)}</span>
+        <span class="finding-badge ${badgeClass}">${badgeText}</span>
+      </div>`;
+    }).join('');
+  } else {
+    findingsList.innerHTML = '';
+  }
+
+  // company detail
+  const comp = data.company;
+  document.getElementById('d-company-name').textContent = comp.name || 'Not detected';
+  document.getElementById('d-company-reason').textContent = comp.reason;
+  const compChip = document.getElementById('d-company-chip');
+  compChip.textContent = comp.status;
+  compChip.className = 'status-chip chip-' + comp.status;
+
+  // url detail
+  const urlData = data.url;
+  document.getElementById('d-url-name').textContent = urlData.value || 'Not found';
+  document.getElementById('d-url-reason').textContent = urlData.reason;
+  const urlChip = document.getElementById('d-url-chip');
+  urlChip.textContent = urlData.status;
+  urlChip.className = 'status-chip chip-' + urlData.status;
+
+  // reasoning
+  const reasoningList = document.getElementById('reasoningList');
+  reasoningList.innerHTML = (data.explanations || []).map(e =>
+    `<div class="reasoning-item">${escHtml(e)}</div>`
+  ).join('');
+
+  // text signals
   const fraudKws = data.text_signals?.fraud_keywords || [];
   const legitSigs = data.text_signals?.legit_signals || [];
 
-  const fraudSection = document.getElementById('fraudKeywordsSection');
-  const legitSection = document.getElementById('legitSignalsSection');
+  const fraudBlock = document.getElementById('fraudSignalsBlock');
+  const legitBlock = document.getElementById('legitSignalsBlock');
 
   if (fraudKws.length > 0) {
-    fraudSection.classList.remove('hidden');
-    document.getElementById('fraudKeywordsList').innerHTML =
-      fraudKws.map(k => `<span class="keyword-tag fraud-tag">${k}</span>`).join('');
+    fraudBlock.classList.remove('hidden');
+    document.getElementById('fraudTags').innerHTML =
+      fraudKws.map(k => `<span class="signal-tag tag-fraud">${escHtml(k)}</span>`).join('');
   } else {
-    fraudSection.classList.add('hidden');
+    fraudBlock.classList.add('hidden');
   }
 
   if (legitSigs.length > 0) {
-    legitSection.classList.remove('hidden');
-    document.getElementById('legitSignalsList').innerHTML =
-      legitSigs.map(k => `<span class="keyword-tag legit-tag">${k}</span>`).join('');
+    legitBlock.classList.remove('hidden');
+    document.getElementById('legitTags').innerHTML =
+      legitSigs.map(k => `<span class="signal-tag tag-legit">${escHtml(k)}</span>`).join('');
   } else {
-    legitSection.classList.add('hidden');
+    legitBlock.classList.add('hidden');
   }
-
-  // Scroll to results
-  setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────
-function setBar(barId, pct, isFraud, valueId, label) {
-  const bar = document.getElementById(barId);
-  bar.className = `score-bar ${isFraud ? 'fraud-bar' : 'safe-bar'}`;
-  setTimeout(() => { bar.style.width = Math.min(100, pct) + '%'; }, 200);
-  document.getElementById(valueId).textContent = label;
+function renderScoreBar(key, fraudRisk, animate) {
+  const pct = Math.round(fraudRisk * 100);
+  const bar = document.getElementById('bar-' + key);
+  const val = document.getElementById('val-' + key);
+
+  let colorClass;
+  if (fraudRisk >= 0.65) colorClass = 'bar-danger';
+  else if (fraudRisk >= 0.4) colorClass = 'bar-warn';
+  else colorClass = 'bar-success';
+
+  bar.className = 'sc-bar ' + colorClass;
+  val.textContent = pct + '%';
+  val.style.color = fraudRisk >= 0.5 ? 'var(--danger)' : 'var(--success)';
+
+  if (animate) {
+    setTimeout(() => { bar.style.width = pct + '%'; }, 150);
+  } else {
+    bar.style.width = pct + '%';
+  }
 }
 
-function animateCounter(id, from, to, suffix, duration) {
-  const el = document.getElementById(id);
-  const start = performance.now();
-  function step(now) {
-    const t = Math.min((now - start) / duration, 1);
-    const ease = t < 0.5 ? 2*t*t : -1 + (4-2*t)*t;
-    el.textContent = Math.round(from + (to - from) * ease) + suffix;
-    if (t < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
+function showState(state) {
+  document.getElementById('emptyState').classList.toggle('hidden', state !== 'empty');
+  document.getElementById('loadingState').classList.toggle('hidden', state !== 'loading');
+  document.getElementById('resultsContainer').classList.toggle('hidden', state !== 'results');
 }
 
 function setLoading(active) {
+  analysisInProgress = active;
   const btn = document.getElementById('analyzeBtn');
   const loader = document.getElementById('btnLoader');
-  const dot = document.getElementById('statusDot');
   btn.disabled = active;
-  loader.classList.toggle('visible', active);
-  dot.classList.toggle('active', active);
-  document.getElementById('btnLoader').style.display = active ? 'block' : 'none';
-  document.querySelector('.btn-text').textContent = active ? 'Analyzing...' : 'Analyze Offer';
+  loader.classList.toggle('show', active);
+  document.querySelector('.run-btn-text').textContent = active ? 'Analyzing...' : 'Run Analysis';
 }
 
-function shakeElement(id) {
-  const el = document.getElementById(id);
-  el.style.animation = 'none';
-  el.offsetHeight; // reflow
-  el.style.animation = 'shake 0.4s ease';
-  el.style.borderColor = 'var(--danger)';
-  setTimeout(() => { el.style.borderColor = ''; el.style.animation = ''; }, 800);
+function animateLoadingSteps(skipScraping) {
+  const steps = ['step-ml', 'step-company', 'step-url', 'step-agent'];
+  const delays = [0, 600, 1100, 1600];
+
+  steps.forEach(id => {
+    const el = document.getElementById(id);
+    el.className = 'load-step';
+  });
+
+  steps.forEach((id, i) => {
+    if (skipScraping && id === 'step-agent') {
+      setTimeout(() => {
+        document.getElementById(id).className = 'load-step';
+      }, delays[i]);
+      return;
+    }
+    setTimeout(() => {
+      // mark previous as done
+      if (i > 0) {
+        document.getElementById(steps[i - 1]).className = 'load-step done';
+      }
+      document.getElementById(id).className = 'load-step active';
+    }, delays[i]);
+  });
 }
 
-function showError(msg) {
-  alert('❌ Error: ' + msg);
-}
-
-function resetForm() {
+function resetUI() {
   document.getElementById('offerText').value = '';
   document.getElementById('companyName').value = '';
   document.getElementById('urlInput').value = '';
-  document.getElementById('charCount').textContent = '0';
-  document.getElementById('resultsSection').classList.add('hidden');
+  document.getElementById('charCount').textContent = '0 characters';
+  showState('empty');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Shake animation
-const style = document.createElement('style');
-style.textContent = `@keyframes shake {
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-8px)}
-  40%{transform:translateX(8px)}
-  60%{transform:translateX(-5px)}
-  80%{transform:translateX(5px)}
-}`;
-document.head.appendChild(style);
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
