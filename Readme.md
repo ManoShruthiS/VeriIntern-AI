@@ -1,155 +1,138 @@
-# 🛡️ VeriIntern AI — Internship Fraud Detection System
+# VeriIntern AI: Advanced Internship Fraud Detection System
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Flask-3.0.0-000000?style=for-the-badge&logo=flask&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Status-Stable-brightgreen?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/Architecture-4--Layer%20Fusion-blue?style=for-the-badge"/>
-</p>
+## Executive Summary
+VeriIntern AI is a sophisticated cybersecurity framework engineered to mitigate the rising threat of internship-related financial fraud and identity theft. By implementing a multi-layered Intelligent Fusion Engine, the system performs real-time validation of internship offers through semantic analysis, identity verification, and autonomous web-intelligence research. The platform serves as a critical defensive layer for academic and professional institutions, ensuring the integrity of student career opportunities.
 
 ---
 
-## 📌 Project Overview
-**VeriIntern AI** is a professional-grade cybersecurity tool designed to protect students from sophisticated internship fraud. Using a multi-layered **Intelligent Fusion Engine**, it analyzes offer text, verifies company identities, and cross-references global knowledge bases to identify scams with high precision.
+## Architectural Framework
 
----
-
-## 🏗️ System Architecture & Flow
-
-### 1. High-Level User Journey
-How a student interacts with the system:
+### System Interaction Workflow
+The following diagram illustrates the formal process from initial signal ingestion to the delivery of the contextual verdict.
 
 ```mermaid
 graph LR
-    User([Student]) --> Input[Paste Internship Text]
-    Input --> Analysis[Intelligent Analysis]
-    Analysis --> Verdict{Verdict}
-    Verdict --> Legit[✅ Legitimate: Safe to Apply]
-    Verdict --> Fraud[🚨 FRAUD: DO NOT PAY]
-```
-
-### 2. The 4-Layer Verification Pipeline
-Our "Defense-in-Depth" strategy for analyzing every internship offer:
-
-```mermaid
-graph TD
-    A[Start: Offer Data Received] --> B{Layer 1: Text Signals}
-    B -->|Check| B1[Tiered Keywords]
-    B -->|Check| B2[Negation-Aware Scan]
-    
-    A --> C{Layer 2: Entity Check}
-    C -->|Normalise| C1[Homoglyph Normalizer]
-    C -->|Compare| C2[Verified DB Match]
-    
-    A --> D{Layer 3: URL Analysis}
-    D -->|Evaluate| D1[Domain Age & TLD]
-    D -->|Check| D2[Link Activity Status]
-    
-    A --> E{Layer 4: Global Agent}
-    E -->|Query| E1[Wikipedia Research]
-    E -->|Process| E2[Contradiction Guard]
-    
-    B & C & D & E --> F[Weighted Fusion Engine]
-    F --> G[Final Confidence Verdict]
+    User([System Participant]) --> Submission[Signal Ingestion]
+    Submission --> Engine[Intelligent Fusion Engine]
+    Engine --> Verification[Multi-Layer Validation]
+    Verification --> Logic[Weighted Scoring Logic]
+    Logic --> Verdict{Contextual Verdict}
+    Verdict --> Legit[Legitimate: Secure Profile]
+    Verdict --> Fraud[Fraudulent: Elevated Risk]
 ```
 
 ---
 
-## 🔬 Core Technologies & Logic
+## The Four-Layer Verification Pipeline
 
-### 1️⃣ Homoglyph Impersonation Guard
-We detect "visual typos" that human eyes often miss but scammers use to mimic giants like Google or Microsoft.
+The system employs a defense-in-depth strategy, analyzing each internship offer through four distinct computational layers to ensure maximum detection precision.
+
+### 1. Semantic Signal Analysis
+The engine utilizes natural language processing (NLP) to identify high-risk linguistic patterns. It employs a negation-aware keyword detection system that distinguishes between legitimate process descriptions and fraudulent monetary demands.
+
+### 2. Digital Identity Verification
+This layer focuses on detecting sophisticated impersonation tactics. The system maintains a curated database of verified global organizations and utilizes a custom normalization algorithm to identify visual deception.
+
+#### Homoglyph Deception Guard
+Fraudulent actors often use visually similar characters (Homoglyphs) to mimic reputable corporations. VeriIntern AI neutralizes this through a canonical normalization process.
 
 ```mermaid
 flowchart LR
-    In[Input: 'rnicrosoft'] --> Norm[Visual Normalizer]
-    Norm --> Out[Canonical: 'microsoft']
-    Out --> Verify{Verified ID?}
-    Verify -- Yes --> Alert[🚨 IMPERSONATION ALERT]
+    Input[Ambiguous Input: 'rnicrosoft'] --> Normalizer[Canonical Normalization]
+    Normalizer --> Canonical[Resolved Identity: 'microsoft']
+    Canonical --> CrossRef{Identity Verification}
+    CrossRef -- Positive Match --> Alert[Impersonation Detected]
 ```
 
-| Type | Fake | Detected As |
-|------|------|-------------|
-| **rn → m** | `rnicrosoft` | **microsoft** |
-| **0 → o** | `g00gle` | **google** |
-| **vv → w** | `vvipro` | **wipro** |
+### 3. Network Infrastructure Analysis
+Automated validation of URL endpoints included in internship offers. The system evaluates domain age, Top-Level Domain (TLD) reputation, and real-time server responsiveness to identify phishing infrastructure.
 
-### 2️⃣ Weighted Fusion Engine
-Scores are combined using a dynamic weighting system that prioritizes **Global Presence (Web Agent)** over simple text matching.
-
-| Component | Weight | Purpose |
-|-----------|--------|---------|
-| **Web Agent** | **55%** | Verifies global entity footprint. |
-| **Company Check** | **25%** | Detects name trickery/impersonation. |
-| **Text Analysis** | **20%** | Analyzes language and payment red flags. |
-
-> [!IMPORTANT]
-> **Scam Override**: If the "Global Agent" detects a "Registration Fee" demand, the fraud score is automatically forced to **99%**, even if the company name looks real.
-
----
-
-## 🤖 Web Research Agent Logic
-The agent doesn't just look for "real" entities—it checks for **Contextual Consistency**.
+### 4. Autonomous Web-Intelligence Agent
+The system deploys an autonomous research agent that queries global knowledge bases (e.g., Wikipedia) to verify the legal and corporate existence of the claiming entity.
 
 ```mermaid
 flowchart TD
-    Start[Agent Start] --> Search[Wikipedia Search]
-    Search --> Found{Entity Found?}
+    Start[Agent Initialization] --> Query[Knowledge Base Query]
+    Query --> Validation{Entity Validation}
     
-    Found -- No --> F3[Score: 0.20 - Unknown Entity]
+    Validation -- Entity Not Found --> Risk[High Risk Score]
     
-    Found -- Yes --> Exact{Exact Match?}
-    Exact -- No --> F2[Score: 0.35 - Typo Risk]
+    Validation -- Match Confirmed --> Consistency{Consistency Analysis}
     
-    Exact -- Yes --> Signals{Is it a Company?}
-    Signals -- No --> F4[Score: 0.40 - Place/Object]
-    
-    Signals -- Yes --> Checks[Check for 'Registration Fee']
-    Checks -- Detected --> F1[Score: 0.01 - SCAM OVERRIDE]
-    Checks -- Clean --> F5[Score: 0.95 - Verified Org]
+    Consistency -- Contradiction Detected --> Override[Scam Override: 99% Fraud]
+    Consistency -- Consistent --> Verified[Certified Entity Status]
 ```
 
 ---
 
-## 📁 Project Structure
+## Weighted Fusion Engine Logic
 
+Final verdicts are calculated using a sophisticated weighting algorithm that prioritizes external web-intelligence and verified identity records over self-contained text signals.
+
+| Analytical Component | Weighting | Functional Purpose |
+|:--- |:--- |:--- |
+| **Autonomous Web Agent** | 55% | Validates corporate footprint and global presence. |
+| **Identity Verification** | 25% | Detects impersonation and homoglyph visual tricks. |
+| **Semantic Analysis** | 20% | Identifies linguistic red flags and payment demands. |
+
+---
+
+## Technical Specifications
+
+### Core Technologies
+- **Backend Architecture**: Python 3.10+ / Flask Micro-framework
+- **Analysis Engine**: Natural Language Processing (NLP) / Multi-weighted Fusion Logic
+- **Intelligence Integrations**: MediaWiki API Integration
+- **Frontend Interface**: Advanced CSS3 / Dynamic JavaScript Rendering
+
+### Project Structure
 ```text
 VeriIntern-AI/
-├── app.py                 # Core API & Fusion Scoring Engine
+├── app.py                     # Core API and Scoring Orchestration
 ├── utils/
-│   ├── company_check.py   # Homoglyph & Database Logic
-│   ├── url_check.py       # Phishing Detection Logic
-│   └── scraping_agent.py  # Wikipedia Research Agent
+│   ├── company_check.py       # Identity Verification and Normalization
+│   ├── url_check.py           # Network Infrastructure Analysis
+│   └── scraping_agent.py      # Autonomous Web Research Logic
 ├── static/
-│   ├── style.css          # Premium Dark Theme Styles
-│   └── script.js          # Result Rendering & Auto-Detection
+│   ├── style.css              # System UI Design Patterns
+│   └── script.js              # Result Orchestration and Rendering
 ├── templates/
-│   └── index.html         # User Dashboard UI
-└── test_scoring.py        # Automated Test Suite
+│   └── index.html             # System Dashboard
+└── test_scoring.py            # Automated Validation Suite
 ```
 
 ---
 
-## 🚀 Installation & Usage
+## Deployment and Execution
 
-1.  **Clone Repository**:
-    ```bash
-    git clone https://github.com/manoshruthis/VeriIntern-AI.git
-    ```
-2.  **Activate Environment**:
-    ```bash
-    python -m venv venv
-    venv\Scripts\activate
-    ```
-3.  **Install & Run**:
-    ```bash
-    pip install -r requirements.txt
-    python app.py
-    ```
+### Prerequisites
+- Python 3.10 or higher
+- Pip package manager
+
+### Installation Procedure
+1. Initialize the environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # venv\Scripts\activate on Windows
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Execute the application:
+   ```bash
+   python app.py
+   ```
 
 ---
 
-<p align="center">
-  Developed with focus on Student Safety<br/>
-  <strong>Team VeriIntern</strong>
-</p>
+## Project Governance and Leadership
+The development and architectural design of VeriIntern AI were spearheaded by the following team members:
+
+- **Mano Shruthi S**
+- **Bala Sowndarya B**
+- **Kowsalya V**
+- **Kaviya Varshini S**
+
+---
+VeriIntern AI - Cybersecurity Research and Development
