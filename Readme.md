@@ -1,135 +1,116 @@
-# VeriIntern AI: The Smart Internship Guard
+# VeriIntern AI: Technical & Theoretical Specification
 
-## Project Overview
-VeriIntern AI is a professional tool built to protect students from internship scams. It uses advanced technology to scan job offers, check company names, and verify website links. By combining several layers of smart analysis, it helps you know if an internship is a real career opportunity or a dangerous fraud.
-
----
-
-## How it Works
-The system follows a simple but powerful path to verify every offer you submit.
-
-```mermaid
-graph TD
-    A[Paste Job Offer] --> B[Smart Analysis Begins]
-    B --> C{The 4-Layer Check}
-    
-    subgraph "Verification Pipeline"
-    C --> C1[Layer 1: Text Review]
-    C --> C2[Layer 2: Identity Check]
-    C --> C3[Layer 3: Link Safety]
-    C --> C4[Layer 4: Web Search]
-    end
-    
-    C1 & C2 & C3 & C4 --> D[Calculate Score]
-    D --> E{Show Result}
-    
-    E -->|Safe| F[Legitimate: Recommended]
-    E -->|At Risk| G[Fraud: High Danger]
-```
+## Abstract
+VeriIntern AI is a multi-layered analytical framework designed to identify and neutralize fraudulent internship solicitations. By implementing an **Intelligent Fusion Engine**, the system cross-references semantic text signals, digital identity markers, and global knowledge-base records. This architecture ensures a prioritized verification process that prioritizes "Ground Truth" intelligence over self-contained linguistic patterns, effectively mitigating the threat of internship-related cyber-fraud.
 
 ---
 
-## Our Smart Detection Layers
+## Architectural Theory
 
-We don't just look for "scam words." We use a multi-stage approach to find the truth behind every message.
-
-### 1. Smart Text Review
-Our system reads the internship text to find hidden "red flags." It understands context—for example, it knows that "No registration fee" is a good sign, while "Pay registration fee" is a warning.
-
-### 2. Name Trick Detection (Identity Check)
-Scammers often use "visual tricks" to pretend they are from big companies like Google or Microsoft. They might use a zero (0) instead of an 'o', or 'rn' instead of an 'm'. 
-
-**Example of how we catch these tricks:**
+### 1. Multi-Dimensional Defense-in-Depth
+The system operates on an isolating layered model where each computational layer performs a specific validation specialized in a single data dimension. This prevents a single failure point—such as a convincing but fake company name—from compromising the entire verdict.
 
 ```mermaid
-flowchart LR
-    ScamInput[Input: 'rnicrosoft'] -- We Catch the Trick --> CleanOutput[Real Name: 'microsoft']
-    CleanOutput -- Verify Database --> Result[Alert: This is a Fake Account!]
+sequenceDiagram
+    participant U as User Input
+    participant T as Semantic Layer
+    participant I as Identity Layer
+    participant N as Network Layer
+    participant W as Web Intelligence
+    participant F as Fusion Engine
+
+    U->>T: Submit Offer Text
+    T->>F: Linguistic Signals (Low Entropy)
+    U->>I: Extract Claimed Identity
+    I->>F: Visual Identity Score
+    U->>N: Validate URL Infrastructure
+    N->>F: Domain Safety Index
+    U->>W: Research Web Intelligence
+    W->>F: Global Presence Index (High Entropy)
+    F->>U: Final Analytical Verdict
 ```
 
-| Visual Trick | What it Looks Like | Real Identity |
-|:--- |:--- |:--- |
-| Character Change | rnicrosoft | **microsoft** |
-| Number Swap | g00gle | **google** |
-| Symbol Trick | micro$oft | **microsoft** |
-
-### 3. Website & Link Safety
-The system checks every link to see if it is live and if the website name actually belongs to the company. It looks for "phishing" signs that a normal person might miss.
-
-### 4. Global Background Checker
-Our "Web Agent" acts like a digital researcher. It searches trusted global databases (like Wikipedia) to see if the company exists and if they have a history of offering internships.
+### 2. Weighted Information Fusion Logic
+VeriIntern AI utilizes a prioritized weighting system. We acknowledge that text-based signals (e.g., "Registration Fee") are informative but easily manipulated by scammers. Therefore, the system assigns the highest weight (55%) to **External Knowledge Verification**, ensuring that an organization's global footprint is the primary driver of legitimacy.
 
 ---
 
-## The Scoring Logic (Simplified)
-The system combines the results from all layers. Some layers are more important than others because they are harder to fake.
+## Technological Stack Evaluation
 
-```mermaid
-pie title "How we weight the evidence"
-    "Global Background Check" : 55
-    "Company Identity Check" : 25
-    "Text Analysis" : 20
-```
+Each tool in our stack was selected based on technical performance, library ecosystem, and security requirements:
 
-- **Global Presence (55%)**: If the company isn't found in global records, it's a major red flag.
-- **Identity (25%)**: Catching name tricks is a strong indicator of fraud.
-- **Text Patterns (20%)**: Checking for "pay now" phrases completes the analysis.
+- **Python 3.10+**: Selected for its robust support for Regular Expressions (re), high-level data manipulation, and the ability to handle complex conditional scoring logic efficiently.
+- **Flask (Micro-framework)**: Chosen for its lightweight overhead and "modular routing" capabilities, allowing for near-instant JSON delivery between the backend analytics and frontend rendering.
+- **MediaWiki Global API**: Utilized to facilitate real-time queries against the world's most comprehensive open knowledge base. This allows the system to acquire "Ground Truth" data dynamically without the need for pre-indexing billions of entities.
+- **Vanilla CSS3 & ES6 JavaScript**: Implemented for a zero-dependency, high-performance analytical dashboard that ensures rapid data updates and sophisticated visual state management.
+
+---
+
+## Core Security Frameworks
+
+### I. Homoglyph Visual Normalization
+Attackers exploit human foveal vision by using visually similar characters (Homoglyphs) to mimic reputable entities. VeriIntern AI neutralizes this through a **Canonical Normalization Engine** that resolves ambiguous characters to their Latin canonical form before performing database comparisons.
+
+### II. Contextual Contradiction Engine
+Beyond simple keyword matching, the system identifies **Semantic Paradoxes**. If a verified global organization (e.g., "Google") is found in the same context as a "Registration Fee" demand, the system triggers a **Scam Override**, as these two signals are mathematically and operationally inconsistent in legitimate recruitment.
 
 ---
 
 ## Exhaustive Project Structure
 
-VeriIntern AI is organized into a modular architecture. Below is the complete list of files included in this repository:
+VeriIntern AI is engineered with a strict modular hierarchy to ensure maintainability and security isolation:
 
 ```text
 VeriIntern-AI/
-├── .gitignore                # Git Configuration: Specifies files to ignore
-├── app.py                    # Main Server: Orchestrates the scoring engine and API
-├── Readme.md                 # Documentation: Comprehensive project guide
-├── requirements.txt          # Dependencies: List of required Python libraries
-├── test_scoring.py           # Testing: Automated scripts to verify analysis
+├── .gitignore                # Git Configuration: Defines system exclusion rules
+├── app.py                    # Analytical Orchestrator: Core API and Fusion Logic
+├── Readme.md                 # Technical Specification: System documentation
+├── requirements.txt          # Dependency Manifest: List of requisite libraries
+├── test_scoring.py           # Verification Suite: Automated logic validation scripts
 │
-├── utils/                    # Logic Core: Specialized analysis modules
-│   ├── __init__.py           # Package Init: Marks the directory as a Python package
-│   ├── company_check.py      # Identity Engine: Catching name tricks
-│   ├── scraping_agent.py     # Web Intelligence: Wikipedia research agent
-│   └── url_check.py          # Link Analysis: Checking URL safety
+├── utils/                    # Theoretical Core: Specialized analysis modules
+│   ├── __init__.py           # Package Descriptor: Defines the directory as a module
+│   ├── company_check.py      # Identity Engine: Implements Homoglyph normalization
+│   ├── scraping_agent.py     # Intelligence Agent: Wikipedia research logic
+│   └── url_check.py          # Network Logic: URL infrastructure analysis
 │
-├── templates/                # Layout: Dashboard structure
-│   └── index.html            # User Interface: The HTML application dashboard
+├── templates/                # Presentation Layer: Structural layout
+│   └── index.html            # Analytical Dashboard: System interface
 │
-└── static/                   # Assets: Design and interactivity
-    ├── favicon.svg           # Icon: System brand mark
-    ├── script.js             # Interactivity: UI logic and API communication
-    └── style.css             # Visuals: Professional dark-themed design
+└── static/                   # Asset Management: Visual and logical assets
+    ├── favicon.svg           # Identity Asset: System brand mark
+    ├── script.js             # Client Logic: UI orchestration and API bridging
+    └── style.css             # Visual Directives: Premium design patterns
 ```
 
 ---
 
-## How to Run the Project
+## Deployment & Implementation Guide
 
 ### Prerequisites
-- Python 3.10 installed on your computer.
+- Python 3.10 or higher
+- Pip Package Manager
 
-### Setup Steps
-1. **Prepare the environment**:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
-2. **Install requirements**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Start the system**:
-   ```bash
-   python app.py
-   ```
+### System Initialization
+1.  **Environment Preparation**:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # venv\Scripts\activate on Windows
+    ```
+2.  **Library Installation**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  **Engine Execution**:
+    ```bash
+    python app.py
+    ```
 
 ---
 
-## Project Team
-This project was designed and developed by the following team members:
+## Project Leadership & Governance
+
+The technical architecture and development of VeriIntern AI are spearheaded by:
 
 - **Mano Shruthi S**
 - **Bala Sowndarya B**
@@ -137,4 +118,4 @@ This project was designed and developed by the following team members:
 - **Kaviya Varshini S**
 
 ---
-VeriIntern AI - Making Internships Safer for Everyone
+VeriIntern AI - Cybersecurity Research and Advanced Development
