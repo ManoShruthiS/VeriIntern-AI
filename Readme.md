@@ -1,7 +1,7 @@
 # VeriIntern AI: Technical & Theoretical Specification
 
 ## Abstract
-VeriIntern AI is a multi-layered analytical framework designed to identify and neutralize fraudulent internship solicitations. By implementing an **Intelligent Fusion Engine**, the system cross-references semantic text signals, digital identity markers, and global knowledge-base records. This architecture ensures a prioritized verification process that prioritizes "Ground Truth" intelligence over self-contained linguistic patterns, effectively mitigating the threat of internship-related cyber-fraud.
+VeriIntern AI is a multi-layered analytical system designed to identify and flag fraudulent internship solicitations. By implementing a **Weighted Fusion Engine**, the system cross-references linguistic patterns, digital identity markers, and global knowledge-base records. This architecture ensures a prioritized verification process that values verified web-intelligence over self-contained text signals, mitigating the threat of internship-related fraud.
 
 ---
 
@@ -39,20 +39,20 @@ VeriIntern AI utilizes a prioritized weighting system. We acknowledge that text-
 
 Each tool in our stack was selected based on technical performance, library ecosystem, and security requirements:
 
-- **Python 3.10+**: Selected for its robust support for Regular Expressions (re), high-level data manipulation, and the ability to handle complex conditional scoring logic efficiently.
-- **Flask (Micro-framework)**: Chosen for its lightweight overhead and "modular routing" capabilities, allowing for near-instant JSON delivery between the backend analytics and frontend rendering.
-- **MediaWiki Global API**: Utilized to facilitate real-time queries against the world's most comprehensive open knowledge base. This allows the system to acquire "Ground Truth" data dynamically without the need for pre-indexing billions of entities.
-- **Vanilla CSS3 & ES6 JavaScript**: Implemented for a zero-dependency, high-performance analytical dashboard that ensures rapid data updates and sophisticated visual state management.
+- **Python 3.10+**: Utilized for text processing (regex), data manipulation, and implementing the conditional scoring logic.
+- **Flask (Micro-framework)**: Serves as the web orchestration layer, delivering JSON data between the analytical backend and the user dashboard.
+- **MediaWiki Global API**: Used to query the Wikipedia database in real-time to verify the existence and legitimacy of claimed organizations.
+- **Vanilla CSS3 & ES6 JavaScript**: Powers the zero-dependency frontend dashboard, handling real-time UI updates and result rendering.
 
 ---
 
-## Core Security Frameworks
+## Core Security Mechanics
 
 ### I. Homoglyph Visual Normalization
-Attackers exploit human foveal vision by using visually similar characters (Homoglyphs) to mimic reputable entities. VeriIntern AI neutralizes this through a **Canonical Normalization Engine** that resolves ambiguous characters to their Latin canonical form before performing database comparisons.
+Fraudulent actors often use visually similar characters (Homoglyphs) to impersonate reputable companies (e.g., using 'rn' instead of 'm'). VeriIntern AI neutralizes this through a **Normalization Engine** that resolves ambiguous characters to their standard form before verification.
 
-### II. Contextual Contradiction Engine
-Beyond simple keyword matching, the system identifies **Semantic Paradoxes**. If a verified global organization (e.g., "Google") is found in the same context as a "Registration Fee" demand, the system triggers a **Scam Override**, as these two signals are mathematically and operationally inconsistent in legitimate recruitment.
+### II. Semantic Contradiction Logic
+The system identifies logic gaps in offers. For example, if a verified organization (like "Google") is extracted from a text that simultaneously demands a "Registration Fee," the system triggers a **Scam Override**, as these two signals are operationally inconsistent in legitimate hiring.
 
 ---
 
@@ -118,4 +118,4 @@ The technical architecture and development of VeriIntern AI are spearheaded by:
 - **Kaviya Varshini S**
 
 ---
-VeriIntern AI - Cybersecurity Research and Advanced Development
+VeriIntern AI - Internship Fraud Detection System
