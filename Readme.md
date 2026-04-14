@@ -77,29 +77,31 @@ pie title "How we weight the evidence"
 
 ---
 
-## Detailed Project Structure
+## Exhaustive Project Structure
 
-VeriIntern AI is organized into a modular architecture to ensure clean separation between the user interface, the analysis logic, and the intelligence agents.
+VeriIntern AI is organized into a modular architecture. Below is the complete list of files included in this repository:
 
 ```text
 VeriIntern-AI/
+├── .gitignore                # Git Configuration: Specifies files to ignore
 ├── app.py                    # Main Server: Orchestrates the scoring engine and API
+├── Readme.md                 # Documentation: Comprehensive project guide
 ├── requirements.txt          # Dependencies: List of required Python libraries
-├── test_scoring.py           # Testing: Automated scripts to verify analysis accuracy
-├── Readme.md                 # Documentation: The guide you are currently reading
-├── .gitignore                # Git Config: Specifies files for the system to ignore
+├── test_scoring.py           # Testing: Automated scripts to verify analysis
 │
 ├── utils/                    # Logic Core: Specialized analysis modules
-│   ├── company_check.py      # Identity Engine: Catching name tricks and impersonation
-│   ├── scraping_agent.py     # Web Intelligence: Autonomous research via Wikipedia
-│   └── url_check.py          # Link Analysis: Checking URL safety and domain matches
+│   ├── __init__.py           # Package Init: Marks the directory as a Python package
+│   ├── company_check.py      # Identity Engine: Catching name tricks
+│   ├── scraping_agent.py     # Web Intelligence: Wikipedia research agent
+│   └── url_check.py          # Link Analysis: Checking URL safety
 │
-├── templates/                # Layout: The primary structure of the web dashboard
-│   └── index.html            # User Interface: The HTML dashboard for the application
+├── templates/                # Layout: Dashboard structure
+│   └── index.html            # User Interface: The HTML application dashboard
 │
-└── static/                   # Assets: Design and interactivity for the dashboard
-    ├── style.css             # Visuals: The premium dark-themed design patterns
-    └── script.js             # Interactivity: Handles UI updates and server communication
+└── static/                   # Assets: Design and interactivity
+    ├── favicon.svg           # Icon: System brand mark
+    ├── script.js             # Interactivity: UI logic and API communication
+    └── style.css             # Visuals: Professional dark-themed design
 ```
 
 ---
