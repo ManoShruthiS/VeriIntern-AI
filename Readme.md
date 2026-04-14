@@ -141,34 +141,36 @@ flowchart LR
 
 ## Expected System Output
 
-| Component | Information Delivered |
-|:--- |:--- |
-| Verdict Status | Fraud or Legitimate |
-| Confidence Level | Calculated percentage (0–100%) |
-| Reasoning List | Multi-point analysis of flagged signals |
 | Entity Status | Verified Organization / Impersonation / Unknown |
 
 ---
 
-## Project Methodology (15-Day Milestone Strategy)
+## Technical File Structure
 
-| Developmental Phase | Strategic Duration |
-|:--- |:--- |
-| Dataset Harvesting & Analysis | 2 Days |
-| ML Model Development & Training | 4 Days |
-| Multi-Layer Verification Logic | 3 Days |
-| Backend Orchestration (Flask) | 3 Days |
-| UI/UX Dashboard Integration | 2 Days |
-| Verification & Final Optimization | 1 Day |
+VeriIntern-AI is engineered with a strict modular hierarchy to ensure maintainability and security isolation:
 
----
-
-## Theoretical Future Enhancements
-
-* Implementation of Deep Learning (BERT) transformers for text analysis
-* Real-time API integration with corporate recruitment databases
-* Browser-based extension for automated site scanning
-* Secure SMTP integration for email scam analysis
+```text
+VeriIntern-AI/
+├── .gitignore                # Git Configuration: Defines system exclusion rules
+├── app.py                    # Analytical Orchestrator: Core API and Fusion Logic
+├── Readme.md                 # Technical Specification: System documentation
+├── requirements.txt          # Dependency Manifest: List of requisite libraries
+├── test_scoring.py           # Verification Suite: Automated logic validation scripts
+│
+├── utils/                    # Theoretical Core: Specialized analysis modules
+│   ├── __init__.py           # Package Descriptor: Defines the directory as a module
+│   ├── company_check.py      # Identity Engine: Implements Homoglyph normalization
+│   ├── scraping_agent.py     # Intelligence Agent: Wikipedia research logic
+│   └── url_check.py          # Network Logic: URL infrastructure analysis
+│
+├── templates/                # Presentation Layer: Structural layout
+│   └── index.html            # Analytical Dashboard: System interface
+│
+└── static/                   # Asset Management: Visual and logical assets
+    ├── favicon.svg           # Identity Asset: System brand mark
+    ├── script.js             # Client Logic: UI orchestration and API bridging
+    └── style.css             # Visual Directives: Premium design patterns
+```
 
 ---
 
@@ -178,12 +180,6 @@ flowchart LR
 * Bala Sowndarya B
 * Kowsalya V
 * Kaviya Varshini S
-
----
-
-## Project Status
-
-Stable / Complete
 
 ---
 
