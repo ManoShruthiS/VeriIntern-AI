@@ -136,8 +136,8 @@ SUSPICIOUS_COMPANY_PATTERNS = [
 
 
 def normalize(name: str) -> str:
-    """Basic normalization: lowercase, strip non-alpha except spaces."""
-    return re.sub(r"[^a-z\s]", "", name.lower().strip())
+    """Basic normalization: lowercase, strip non-alpha/numeric except spaces."""
+    return re.sub(r"[^a-z0-9\s]", "", name.lower().strip())
 
 
 def normalize_homoglyphs(name: str) -> str:
@@ -153,8 +153,8 @@ def normalize_homoglyphs(name: str) -> str:
     # Single-character substitutions
     for fake, real in HOMOGLYPH_SINGLE.items():
         result = result.replace(fake, real)
-    # Final cleanup: strip non-alpha except spaces
-    return re.sub(r"[^a-z\s]", "", result)
+    # Final cleanup: strip non-alpha/numeric except spaces
+    return re.sub(r"[^a-z0-9\s]", "", result)
 
 
 def detect_homoglyph_tricks(original: str) -> list:
