@@ -267,10 +267,10 @@ def verify_company(company_name: str) -> dict:
                 "reason": f"'{company_name}' matches known fraudulent company name patterns."
             }
 
-    # Step 5: Unknown company - lean legitimate, let web agent (Wikipedia) decide
-    # Real MCA-registered companies not in our list get benefit of the doubt here.
+    # Step 5: Unknown company - Strict Mode
+    # Any company not explicitly listed in the known database is flagged.
     return {
-        "status": "unknown",
-        "score": 0.65,
-        "reason": f"'{company_name}' not in verified list - web verification will determine legitimacy."
+        "status": "unverified",
+        "score": 0.10,
+        "reason": f"'{company_name}' is not in our verified database. Unlisted companies are flagged as suspicious."
     }
