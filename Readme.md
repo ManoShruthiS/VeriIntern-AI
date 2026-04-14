@@ -1,121 +1,195 @@
-# VeriIntern AI: Technical & Theoretical Specification
+# VeriIntern-AI
 
-## Abstract
-VeriIntern AI is a multi-layered analytical system designed to identify and flag fraudulent internship solicitations. By implementing a **Weighted Fusion Engine**, the system cross-references linguistic patterns, digital identity markers, and global knowledge-base records. This architecture ensures a prioritized verification process that values verified web-intelligence over self-contained text signals, mitigating the threat of internship-related fraud.
+### Intelligent Fraud Detection System for Internship Offers
 
 ---
 
-## Architectural Theory
+## Overview
 
-### 1. Multi-Dimensional Defense-in-Depth
-The system operates on an isolating layered model where each computational layer performs a specific validation specialized in a single data dimension. This prevents a single failure point—such as a convincing but fake company name—from compromising the entire verdict.
+VeriIntern-AI is a professional analytical system designed to detect fraudulent internship offers by combining text analysis, corporate identity verification, and infrastructure validation.
+
+Unlike traditional detection methods, this system utilizes a multi-layer fusion approach to evaluate the legitimacy of an offer, cross-referencing global knowledge bases and security markers to protect student career paths.
+
+---
+
+## Problem Statement
+
+Students frequently encounter fraudulent internship solicitations that involve:
+
+* Unauthorized payment requests or "registration fees"
+* Deceptive company identities using visual character tricks
+* Suspicious or phishing web URLs
+
+Standard detection methods often rely solely on keyword matching, which fails to catch sophisticated impersonations. There is a requirement for a comprehensive system that verifies offers through multiple high-entropy signals.
+
+---
+
+## Objective
+
+* Develop a multi-source analytical framework for fraud detection
+* Integrate ML-based linguistic predictions with external intelligence checks
+* Provide a clear verdict, confidence score, and detailed explanation report
+* Ensure the system is built using high-performance, open-source libraries
+* Deliver a structured and verified technical prototype
+
+---
+
+## System Architecture
 
 ```mermaid
-sequenceDiagram
-    participant U as User Input
-    participant T as Semantic Layer
-    participant I as Identity Layer
-    participant N as Network Layer
-    participant W as Web Intelligence
-    participant F as Fusion Engine
+flowchart TD
+    A[Student Submits Offer Details] --> B[Text and URL Extraction]
 
-    U->>T: Submit Offer Text
-    T->>F: Linguistic Signals (Low Entropy)
-    U->>I: Extract Claimed Identity
-    I->>F: Visual Identity Score
-    U->>N: Validate URL Infrastructure
-    N->>F: Domain Safety Index
-    U->>W: Research Web Intelligence
-    W->>F: Global Presence Index (High Entropy)
-    F->>U: Final Analytical Verdict
-```
+    B --> C1[Semantic Analysis Layer]
+    B --> C2[Identity Logic Layer]
+    B --> C3[Network Validation Layer]
+    B --> C4[Web Intelligence Layer]
 
-### 2. Weighted Information Fusion Logic
-VeriIntern AI utilizes a prioritized weighting system. We acknowledge that text-based signals (e.g., "Registration Fee") are informative but easily manipulated by scammers. Therefore, the system assigns the highest weight (55%) to **External Knowledge Verification**, ensuring that an organization's global footprint is the primary driver of legitimacy.
+    C1 --> D[Weighted Fusion Engine]
+    C2 --> D
+    C3 --> D
+    C4 --> D
 
----
-
-## Technological Stack Evaluation
-
-Each tool in our stack was selected based on technical performance, library ecosystem, and security requirements:
-
-- **Python 3.10+**: Utilized for text processing (regex), data manipulation, and implementing the conditional scoring logic.
-- **Flask (Micro-framework)**: Serves as the web orchestration layer, delivering JSON data between the analytical backend and the user dashboard.
-- **MediaWiki Global API**: Used to query the Wikipedia database in real-time to verify the existence and legitimacy of claimed organizations.
-- **Vanilla CSS3 & ES6 JavaScript**: Powers the zero-dependency frontend dashboard, handling real-time UI updates and result rendering.
-
----
-
-## Core Security Mechanics
-
-### I. Homoglyph Visual Normalization
-Fraudulent actors often use visually similar characters (Homoglyphs) to impersonate reputable companies (e.g., using 'rn' instead of 'm'). VeriIntern AI neutralizes this through a **Normalization Engine** that resolves ambiguous characters to their standard form before verification.
-
-### II. Semantic Contradiction Logic
-The system identifies logic gaps in offers. For example, if a verified organization (like "Google") is extracted from a text that simultaneously demands a "Registration Fee," the system triggers a **Scam Override**, as these two signals are operationally inconsistent in legitimate hiring.
-
----
-
-## Exhaustive Project Structure
-
-VeriIntern AI is engineered with a strict modular hierarchy to ensure maintainability and security isolation:
-
-```text
-VeriIntern-AI/
-├── .gitignore                # Git Configuration: Defines system exclusion rules
-├── app.py                    # Analytical Orchestrator: Core API and Fusion Logic
-├── Readme.md                 # Technical Specification: System documentation
-├── requirements.txt          # Dependency Manifest: List of requisite libraries
-├── test_scoring.py           # Verification Suite: Automated logic validation scripts
-│
-├── utils/                    # Theoretical Core: Specialized analysis modules
-│   ├── __init__.py           # Package Descriptor: Defines the directory as a module
-│   ├── company_check.py      # Identity Engine: Implements Homoglyph normalization
-│   ├── scraping_agent.py     # Intelligence Agent: Wikipedia research logic
-│   └── url_check.py          # Network Logic: URL infrastructure analysis
-│
-├── templates/                # Presentation Layer: Structural layout
-│   └── index.html            # Analytical Dashboard: System interface
-│
-└── static/                   # Asset Management: Visual and logical assets
-    ├── favicon.svg           # Identity Asset: System brand mark
-    ├── script.js             # Client Logic: UI orchestration and API bridging
-    └── style.css             # Visual Directives: Premium design patterns
+    D --> E[Final Result: Fraud or Legitimate]
+    D --> F[Confidence Percentage]
+    D --> G[Analytical Reasoning Report]
 ```
 
 ---
 
-## Deployment & Implementation Guide
+## Core Components
 
-### Prerequisites
-- Python 3.10 or higher
-- Pip Package Manager
+### 1. Linguistic Signal Analysis (ML/NLP)
 
-### System Initialization
-1.  **Environment Preparation**:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # venv\Scripts\activate on Windows
-    ```
-2.  **Library Installation**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-3.  **Engine Execution**:
-    ```bash
-    python app.py
-    ```
+* Integrated ML Pipeline with TF-IDF Vectorization
+* Negation-aware keyword detection logic
+* Identifies high-risk semantic patterns such as:
+  * "Payment required" / "Processing fee"
+  * "No interview required"
+  * High-pressure tactics (e.g., "Offer expires tonight")
+
+### 2. Identity Verification Layer
+
+* Multi-stage identity validation including:
+  * Curated database matching of known global organizations
+  * Homoglyph Normalization: Neutralizing visual character deception (e.g., 'rn' mimicking 'm')
+  * Entity consistency checks via global knowledge bases
+
+### 3. Infrastructure & URL Safety
+
+* Automated domain analysis assessing:
+  * Web infrastructure liveness and responsiveness
+  * Top-Level Domain (TLD) safety patterns
+  * Domain-to-Company identity correlation
+
+### 4. Weighted Decision Fusion
+
+The system combines disparate signals using a prioritized weighting logic:
+
+| Analytical Component | Weighting | Functional Role |
+|:--- |:--- |:--- |
+| Web Intelligence Agent | 50% | Primary signal: Validates global footprint |
+| Identity Check | 20% | Detects impersonation and name tricks |
+| Network Safety | 15% | Evaluates link and domain security |
+| ML Text Classification | 15% | Identifies linguistic fraud patterns |
 
 ---
 
-## Project Leadership & Governance
+## Features
 
-The technical architecture and development of VeriIntern AI are spearheaded by:
-
-- **Mano Shruthi S**
-- **Bala Sowndarya B**
-- **Kowsalya V**
-- **Kaviya Varshini S**
+* Multi-layer prioritized fraud detection
+* Machine Learning-based linguistic classification
+* Advanced Homoglyph and impersonation neutralization
+* Real-time web-intelligence research via MediaWiki API
+* Logical confidence scoring and reasoning reports
+* Integrated dashboard for result visualization
 
 ---
-VeriIntern AI - Internship Fraud Detection System
+
+## Tech Stack (Verified Implementation)
+
+| Layer | Technology |
+|:--- |:--- |
+| Language | Python 3.10+ |
+| ML/NLP | Scikit-learn, TF-IDF |
+| Data Processing | Pandas, NumPy |
+| Backend Framework | Flask |
+| Frontend Design | CSS3, HTML5, ES6 JavaScript |
+| Intelligence Source | MediaWiki API (Wikipedia) |
+| Web Scraping | BeautifulSoup4, Requests |
+| Network Analysis | python-whois |
+
+---
+
+## System Workflow
+
+```mermaid
+flowchart LR
+    A[Submit Offer] --> B[Preprocessing & Extraction]
+    B --> C[ML Linguistic Scan]
+    B --> D[Identity Check]
+    B --> E[Network Analysis]
+    B --> F[Web Research]
+    C --> G[Weighted Score Fusion]
+    D --> G
+    E --> G
+    F --> G
+    G --> H[Final Contextual Output]
+```
+
+---
+
+## Expected System Output
+
+| Component | Information Delivered |
+|:--- |:--- |
+| Verdict Status | Fraud or Legitimate |
+| Confidence Level | Calculated percentage (0–100%) |
+| Reasoning List | Multi-point analysis of flagged signals |
+| Entity Status | Verified Organization / Impersonation / Unknown |
+
+---
+
+## Project Methodology (15-Day Milestone Strategy)
+
+| Developmental Phase | Strategic Duration |
+|:--- |:--- |
+| Dataset Harvesting & Analysis | 2 Days |
+| ML Model Development & Training | 4 Days |
+| Multi-Layer Verification Logic | 3 Days |
+| Backend Orchestration (Flask) | 3 Days |
+| UI/UX Dashboard Integration | 2 Days |
+| Verification & Final Optimization | 1 Day |
+
+---
+
+## Theoretical Future Enhancements
+
+* Implementation of Deep Learning (BERT) transformers for text analysis
+* Real-time API integration with corporate recruitment databases
+* Browser-based extension for automated site scanning
+* Secure SMTP integration for email scam analysis
+
+---
+
+## Project Leadership
+
+* Mano Shruthi S
+* Bala Sowndarya B
+* Kowsalya V
+* Kaviya Varshini S
+
+---
+
+## Project Status
+
+Stable / Complete
+
+---
+
+## Conclusion
+
+VeriIntern-AI provides a comprehensive and scalable analytical solution for neutralizing the threat of internship fraud. By fusing linguistic patterns with real-world web intelligence, the system significantly enhances detection accuracy and student safety. This methodology ensures a reliable and trustworthy environment for students navigating online career opportunities.
+
+---
+VeriIntern AI - Finalized Technical Submission
