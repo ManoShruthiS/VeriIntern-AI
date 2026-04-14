@@ -77,18 +77,29 @@ pie title "How we weight the evidence"
 
 ---
 
-## System Structure
-Here is a high-level look at how the project is organized for developers:
+## Detailed Project Structure
+
+VeriIntern AI is organized into a modular architecture to ensure clean separation between the user interface, the analysis logic, and the intelligence agents.
 
 ```text
 VeriIntern-AI/
-├── app.py                     # The central brain of the system
-├── utils/
-│   ├── company_check.py       # Detects name tricks and fake IDs
-│   ├── url_check.py           # Analyzes links for safety
-│   └── scraping_agent.py      # Researches the web for truth
-├── static/ & templates/       # The user-friendly dashboard files
-└── test_scoring.py            # Automated quality assurance
+├── app.py                    # Main Server: Orchestrates the scoring engine and API
+├── requirements.txt          # Dependencies: List of required Python libraries
+├── test_scoring.py           # Testing: Automated scripts to verify analysis accuracy
+├── Readme.md                 # Documentation: The guide you are currently reading
+├── .gitignore                # Git Config: Specifies files for the system to ignore
+│
+├── utils/                    # Logic Core: Specialized analysis modules
+│   ├── company_check.py      # Identity Engine: Catching name tricks and impersonation
+│   ├── scraping_agent.py     # Web Intelligence: Autonomous research via Wikipedia
+│   └── url_check.py          # Link Analysis: Checking URL safety and domain matches
+│
+├── templates/                # Layout: The primary structure of the web dashboard
+│   └── index.html            # User Interface: The HTML dashboard for the application
+│
+└── static/                   # Assets: Design and interactivity for the dashboard
+    ├── style.css             # Visuals: The premium dark-themed design patterns
+    └── script.js             # Interactivity: Handles UI updates and server communication
 ```
 
 ---
