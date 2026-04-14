@@ -1,151 +1,155 @@
-# 🛡️ VeriIntern-AI — Intelligent Fraud Detection System
+# 🛡️ VeriIntern AI — Internship Fraud Detection System
 
-A multi-layer AI-powered system to detect fraudulent internship offers using NLP, company verification, and URL safety analysis.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Flask-3.0.0-000000?style=for-the-badge&logo=flask&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Status-Stable-brightgreen?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Architecture-4--Layer%20Fusion-blue?style=for-the-badge"/>
+</p>
 
 ---
 
-## 👩‍💻 Team Members
-- Mano Shruthi S
-- Bala Sowndarya
-- Kowsalya V
-- Kaviya Varshini S
+## 📌 Project Overview
+**VeriIntern AI** is a professional-grade cybersecurity tool designed to protect students from sophisticated internship fraud. Using a multi-layered **Intelligent Fusion Engine**, it analyzes offer text, verifies company identities, and cross-references global knowledge bases to identify scams with high precision.
+
+---
+
+## 🏗️ System Architecture & Flow
+
+### 1. High-Level User Journey
+How a student interacts with the system:
+
+```mermaid
+graph LR
+    User([Student]) --> Input[Paste Internship Text]
+    Input --> Analysis[Intelligent Analysis]
+    Analysis --> Verdict{Verdict}
+    Verdict --> Legit[✅ Legitimate: Safe to Apply]
+    Verdict --> Fraud[🚨 FRAUD: DO NOT PAY]
+```
+
+### 2. The 4-Layer Verification Pipeline
+Our "Defense-in-Depth" strategy for analyzing every internship offer:
+
+```mermaid
+graph TD
+    A[Start: Offer Data Received] --> B{Layer 1: Text Signals}
+    B -->|Check| B1[Tiered Keywords]
+    B -->|Check| B2[Negation-Aware Scan]
+    
+    A --> C{Layer 2: Entity Check}
+    C -->|Normalise| C1[Homoglyph Normalizer]
+    C -->|Compare| C2[Verified DB Match]
+    
+    A --> D{Layer 3: URL Analysis}
+    D -->|Evaluate| D1[Domain Age & TLD]
+    D -->|Check| D2[Link Activity Status]
+    
+    A --> E{Layer 4: Global Agent}
+    E -->|Query| E1[Wikipedia Research]
+    E -->|Process| E2[Contradiction Guard]
+    
+    B & C & D & E --> F[Weighted Fusion Engine]
+    F --> G[Final Confidence Verdict]
+```
+
+---
+
+## 🔬 Core Technologies & Logic
+
+### 1️⃣ Homoglyph Impersonation Guard
+We detect "visual typos" that human eyes often miss but scammers use to mimic giants like Google or Microsoft.
+
+```mermaid
+flowchart LR
+    In[Input: 'rnicrosoft'] --> Norm[Visual Normalizer]
+    Norm --> Out[Canonical: 'microsoft']
+    Out --> Verify{Verified ID?}
+    Verify -- Yes --> Alert[🚨 IMPERSONATION ALERT]
+```
+
+| Type | Fake | Detected As |
+|------|------|-------------|
+| **rn → m** | `rnicrosoft` | **microsoft** |
+| **0 → o** | `g00gle` | **google** |
+| **vv → w** | `vvipro` | **wipro** |
+
+### 2️⃣ Weighted Fusion Engine
+Scores are combined using a dynamic weighting system that prioritizes **Global Presence (Web Agent)** over simple text matching.
+
+| Component | Weight | Purpose |
+|-----------|--------|---------|
+| **Web Agent** | **55%** | Verifies global entity footprint. |
+| **Company Check** | **25%** | Detects name trickery/impersonation. |
+| **Text Analysis** | **20%** | Analyzes language and payment red flags. |
+
+> [!IMPORTANT]
+> **Scam Override**: If the "Global Agent" detects a "Registration Fee" demand, the fraud score is automatically forced to **99%**, even if the company name looks real.
+
+---
+
+## 🤖 Web Research Agent Logic
+The agent doesn't just look for "real" entities—it checks for **Contextual Consistency**.
+
+```mermaid
+flowchart TD
+    Start[Agent Start] --> Search[Wikipedia Search]
+    Search --> Found{Entity Found?}
+    
+    Found -- No --> F3[Score: 0.20 - Unknown Entity]
+    
+    Found -- Yes --> Exact{Exact Match?}
+    Exact -- No --> F2[Score: 0.35 - Typo Risk]
+    
+    Exact -- Yes --> Signals{Is it a Company?}
+    Signals -- No --> F4[Score: 0.40 - Place/Object]
+    
+    Signals -- Yes --> Checks[Check for 'Registration Fee']
+    Checks -- Detected --> F1[Score: 0.01 - SCAM OVERRIDE]
+    Checks -- Clean --> F5[Score: 0.95 - Verified Org]
+```
 
 ---
 
 ## 📁 Project Structure
 
-```
-veriintern-ai/
-├── app.py                      ← Flask backend (main server)
-├── requirements.txt            ← Python dependencies
-├── data/
-│   ├── generate_dataset.py     ← Generates synthetic training data
-│   └── internship_dataset.csv  ← Generated dataset (800 samples)
-├── model/
-│   ├── train_model.py          ← Trains TF-IDF + Logistic Regression
-│   └── pipeline.pkl            ← Saved trained model
+```text
+VeriIntern-AI/
+├── app.py                 # Core API & Fusion Scoring Engine
 ├── utils/
-│   ├── company_check.py        ← Company legitimacy verifier
-│   └── url_check.py            ← URL safety checker
+│   ├── company_check.py   # Homoglyph & Database Logic
+│   ├── url_check.py       # Phishing Detection Logic
+│   └── scraping_agent.py  # Wikipedia Research Agent
+├── static/
+│   ├── style.css          # Premium Dark Theme Styles
+│   └── script.js          # Result Rendering & Auto-Detection
 ├── templates/
-│   └── index.html              ← Frontend HTML
-└── static/
-    ├── style.css               ← Dark cybersecurity UI styles
-    └── script.js               ← Frontend JavaScript
+│   └── index.html         # User Dashboard UI
+└── test_scoring.py        # Automated Test Suite
 ```
 
 ---
 
-## 🚀 How to Run
+## 🚀 Installation & Usage
 
-### Step 1 — Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### Step 2 — Generate Dataset (already done, skip if csv exists)
-```bash
-python data/generate_dataset.py
-```
-
-### Step 3 — Train the ML Model (already done, skip if pipeline.pkl exists)
-```bash
-python model/train_model.py
-```
-
-### Step 4 — Start the Flask Server
-```bash
-python app.py
-```
-
-### Step 5 — Open in Browser
-```
-http://localhost:5000
-```
+1.  **Clone Repository**:
+    ```bash
+    git clone https://github.com/manoshruthis/VeriIntern-AI.git
+    ```
+2.  **Activate Environment**:
+    ```bash
+    python -m venv venv
+    venv\Scripts\activate
+    ```
+3.  **Install & Run**:
+    ```bash
+    pip install -r requirements.txt
+    python app.py
+    ```
 
 ---
 
-## 🧠 How It Works
-
-### Layer 1 — ML Text Analysis (50% weight)
-- TF-IDF vectorization (unigrams + bigrams, 5000 features)
-- Logistic Regression classifier
-- Detects patterns like: "pay registration fee", "no interview required", "guaranteed certificate"
-
-### Layer 2 — Company Verification (25% weight)
-- Checks against a database of 80+ verified legitimate companies
-- Detects suspicious company name patterns (e.g., TechGrow, EarnFast, DigiWorks)
-- Heuristic scoring based on name structure
-
-### Layer 3 — URL Safety Check (25% weight)
-- Trusted domain whitelist (50+ verified domains)
-- Suspicious TLD detection (.xyz, .top, .click, .tk etc.)
-- URL shortener detection
-- Domain pattern analysis
-- Optional WHOIS domain age check
-
-### Score Fusion Formula
-```
-Fraud Score = (ML × 0.50) + (Company Risk × 0.25) + (URL Risk × 0.25)
-```
-If Fraud Score ≥ 0.5 → FRAUD, else LEGITIMATE
-
----
-
-## 📊 Model Performance (Synthetic Dataset)
-
-| Metric     | Score  |
-|-----------|--------|
-| Accuracy  | 100%   |
-| Precision | 1.00   |
-| Recall    | 1.00   |
-| F1-Score  | 1.00   |
-
-> Note: 100% accuracy is expected on the synthetic dataset as it uses clearly patterned data.
-> Real-world performance will vary. Collect more diverse training data to improve generalization.
-
----
-
-## 🔌 API Endpoint
-
-**POST /analyze**
-
-Request body:
-```json
-{
-  "offer_text": "Paste full internship offer text here",
-  "company_name": "Optional company name",
-  "url": "Optional URL"
-}
-```
-
-Response:
-```json
-{
-  "verdict": "FRAUD",
-  "confidence_percent": 87.4,
-  "combined_fraud_probability": 0.874,
-  "component_scores": {
-    "ml_fraud_probability": 0.95,
-    "company_legitimacy": 0.0,
-    "url_safety": 0.1
-  },
-  "company": { "name": "...", "status": "suspicious", "reason": "..." },
-  "url": { "value": "...", "status": "suspicious", "reason": "..." },
-  "text_signals": {
-    "fraud_keywords": ["pay registration fee", "no interview"],
-    "legit_signals": []
-  },
-  "explanations": ["..."]
-}
-```
-
----
-
-## 💡 Future Enhancements
-- BERT/transformer-based text classification
-- Real-time VirusTotal API for URL scanning
-- LinkedIn/Glassdoor company verification API
-- Browser extension for job boards
-- Email fraud detection
-- Multilingual support (Tamil)
+<p align="center">
+  Developed with focus on Student Safety<br/>
+  <strong>Team VeriIntern</strong>
+</p>

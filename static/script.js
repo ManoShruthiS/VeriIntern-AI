@@ -32,11 +32,46 @@ Apply at: https://careers.google.com/jobs/results/internship-2025`,
 
 let analysisInProgress = false;
 
-// update character count as user types
+let typingTimer;
+const doneTypingInterval = 500;
+
+// update character count and auto-detect fields as user types
 document.getElementById('offerText').addEventListener('input', function() {
-  const len = this.value.length;
-  document.getElementById('charCount').textContent = len.toLocaleString() + ' characters';
+  const text = this.value;
+  document.getElementById('charCount').textContent = text.length.toLocaleString() + ' characters';
+
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(() => {
+    autoDetectFields(text);
+  }, doneTypingInterval);
 });
+
+function autoDetectFields(text) {
+  // Extract URL
+  const urlRegex = /(https?:\/\/[^\s<>"\']+|www\.[^\s<>"\']+)/i;
+  const urlMatch = text.match(urlRegex);
+  if (urlMatch && !document.getElementById('urlInput').value.trim()) {
+    document.getElementById('urlInput').value = urlMatch[0];
+  }
+
+  // Extract Company Name
+  const compRegexList = [
+    /(?:at|with|for|by|from)\s+([A-Z][a-zA-Z\s&]{2,30})(?:\s+is|\s+are|\s+offers?|\s+internship|\.|,)/,
+    /internship\s+(?:at|with|for)\s+([A-Z][a-zA-Z\s&]{2,30})/,
+    /([A-Z][a-zA-Z\s&]{2,25})\s+(?:is hiring|announces|is offering|is recruiting)/
+  ];
+  let companyFound = '';
+  for (let r of compRegexList) {
+    const m = text.match(r);
+    if (m && m[1]) {
+      companyFound = m[1].trim();
+      break;
+    }
+  }
+  if (companyFound && !document.getElementById('companyName').value.trim()) {
+    document.getElementById('companyName').value = companyFound;
+  }
+}
 
 function loadSample(type) {
   const s = SAMPLES[type];
@@ -108,7 +143,6 @@ async function analyzeOffer() {
 function renderResults(data) {
   const isFraud = data.is_fraud;
   const conf = data.confidence_percent;
-  const fraudPct = (data.combined_fraud_probability * 100).toFixed(1) + '%';
   const scores = data.component_scores;
 
   // verdict bar
@@ -116,7 +150,14 @@ function renderResults(data) {
   verdictBar.className = 'verdict-bar ' + (isFraud ? 'fraud' : 'legit');
   document.getElementById('verdictStatus').textContent = isFraud ? 'FRAUD DETECTED' : 'LOOKS LEGITIMATE';
   document.getElementById('verdictSub').textContent = conf + '% confidence in this verdict';
-  document.getElementById('verdictScore').textContent = fraudPct;
+  
+  if (isFraud) {
+    document.getElementById('verdictScore').textContent = conf + '%';
+    document.getElementById('verdictScoreLabel').textContent = 'fraud probability';
+  } else {
+    document.getElementById('verdictScore').textContent = conf + '%';
+    document.getElementById('verdictScoreLabel').textContent = 'legitimacy percentage';
+  }
 
   // score cards
   renderScoreBar('ml', scores.ml_fraud_probability, true);
