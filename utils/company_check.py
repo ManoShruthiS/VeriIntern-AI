@@ -190,13 +190,24 @@ def verify_company(company_name: str) -> dict:
             "reason": f"'{company_name}' is a recognised, verified company."
         }
 
-    # Multi-word name partial match
+    # Step 1b: Partial / Substring Match (e.g. "Google India" should match "google")
+    # We check if any of our known legit brands are a WORD in the provided name.
+    words = set(norm.split())
     for known in KNOWN_LEGIT_COMPANIES:
-        if " " in known and known in norm:
+        # If it's a multi-word known company (like "Tata Consultancy Services"), check for full substring
+        if " " in known:
+            if known in norm:
+                return {
+                    "status": "verified",
+                    "score": 1.0,
+                    "reason": f"'{company_name}' is recognised as part of the verified organization '{known}'."
+                }
+        # If it's a single word brand (like "google"), check if it exists as a standalone word
+        elif known in words:
             return {
                 "status": "verified",
                 "score": 1.0,
-                "reason": f"'{company_name}' is a recognised, verified company."
+                "reason": f"'{company_name}' is recognised as a verified organization."
             }
 
     # Step 2: Homoglyph impersonation detection (e.g. "rnicrosoft" → "microsoft")
@@ -267,10 +278,11 @@ def verify_company(company_name: str) -> dict:
                 "reason": f"'{company_name}' matches known fraudulent company name patterns."
             }
 
-    # Step 5: Unknown company - Strict Mode
-    # Any company not explicitly listed in the known database is flagged.
+    # Step 5: Unknown company - Neutral Stance
+    # Companies not in the curated list are NOT necessarily fraud, they are just "unverified".
+    # We give them a neutral-legitimate score and let the Web Agent decide.
     return {
         "status": "unverified",
-        "score": 0.10,
-        "reason": f"'{company_name}' is not in our verified database. Unlisted companies are flagged as suspicious."
+        "score": 0.45,
+        "reason": f"'{company_name}' is not in our verified database. Relying on web-intelligence agent for validation."
     }
