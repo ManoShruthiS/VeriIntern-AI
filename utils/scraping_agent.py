@@ -37,6 +37,7 @@ WIKI_LEGIT_SIGNALS = [
     'founded', 'headquartered', 'employees', 'revenue', 'listed', 'nasdaq',
     'bse', 'nse', 'fortune', 'inc.', 'ltd', 'corporation', 'company',
     'subsidiary', 'acquired', 'merger', 'products', 'services', 'stock',
+    'multinational', 'technology', 'organization', 'agency', 'llc', 'plc'
 ]
 
 class AgentLog:
@@ -113,7 +114,8 @@ def check_wikipedia_presence(company_name, offer_text, log):
 
             # Check if this Wikipedia entry is actually an organization/company
             legit_signals_in_wiki = sum(1 for kw in WIKI_LEGIT_SIGNALS if kw in snippet)
-            is_likely_org = (legit_signals_in_wiki >= 2)
+            # If it's an exact match, we only need 1 signal. If partial, we need 2.
+            is_likely_org = (legit_signals_in_wiki >= 2) or (is_exact_match and legit_signals_in_wiki >= 1)
             
             # Check for scam behavior using the new strict matching logic
             is_scam, detected_phrase = contains_scam_phrase(offer_lower, SCAM_CONTRADICTION_PHRASES)
