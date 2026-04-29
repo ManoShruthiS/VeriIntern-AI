@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VeriIntern AI — Internship Fraud Detection</title>
+<title>VeriIntern AI — Internship Authenticity Detection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
@@ -25,7 +25,7 @@
       </div>
       <div class="brand-text">
         <span class="brand-name">VeriIntern <span class="brand-ai">AI</span></span>
-        <span class="brand-tagline">Internship Fraud Detection System</span>
+        <span class="brand-tagline">Internship Authenticity Detection System</span>
       </div>
     </div>
     <div class="header-meta">
@@ -89,7 +89,7 @@
 
     <div class="sample-section">
       <span class="sample-label">Load sample:</span>
-      <button class="sample-pill fraud-pill" onclick="loadSample('fraud')">Fraud</button>
+      <button class="sample-pill fraud-pill" onclick="loadSample('fraud')">Inauthentic</button>
       <button class="sample-pill legit-pill" onclick="loadSample('legit')">Legitimate</button>
     </div>
 
@@ -133,7 +133,7 @@
         </div>
         <div class="verdict-right">
           <div class="verdict-score" id="verdictScore"></div>
-          <div class="verdict-score-label" id="verdictScoreLabel">fraud probability</div>
+          <div class="verdict-score-label" id="verdictScoreLabel">Inauthenticity Probability</div>
         </div>
       </div>
 
@@ -231,7 +231,7 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-left">
-    <span>VeriIntern AI — Fraud Detection System</span>
+    <span>VeriIntern AI — Authenticity Detection System</span>
     <span class="footer-sep">|</span>
     <span>© 2026</span>
   </div>
