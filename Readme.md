@@ -458,7 +458,7 @@ The test suite validates:
 | Role | Name | Responsibility |
 |:---|:---|:---|
 | **Team Leader and Tester** | **Bala Sowndarya B** | Project guidance, team coordination, testing and quality assurance, problem solving, ideation, and development support |
-| **Developer** | **Mano Shruthi S** | Full-stack development of the entire web application, ML pipeline, backend architecture, and system implementation |
+| **Developer** | **Mano Shruthi S** | Full-stack development, ML pipeline, backend architecture, and system implementation |
 | **Presenter and Data Collector** | **Kowsalya V** | Project presentation, data collection, and documentation |
 | **Presenter and Data Collector** | **Kaviya Varshini S** | Project presentation, data collection, and documentation |
 
