@@ -2,7 +2,7 @@
 
 # VeriIntern AI
 
-### Intelligent Fraud Detection System for Internship Offers
+### Intelligent Authenticity Detection System for Internship Offers
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/License-Academic-blue?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Production_Ready-brightgreen?style=for-the-badge)]()
 
-A multi-layer AI-powered system that protects students from fraudulent internship offers by combining NLP text analysis, corporate identity verification, URL safety checks, and real-time web intelligence.
+A multi-layer AI-powered system that protects students from deceptive internship offers by combining NLP text analysis, corporate identity verification, URL safety checks, and real-time web intelligence.
 
 </div>
 
@@ -37,7 +37,7 @@ A multi-layer AI-powered system that protects students from fraudulent internshi
 
 ## Problem Statement
 
-Students frequently encounter fraudulent internship solicitations that involve:
+Students frequently encounter illegitimate internship solicitations that involve:
 
 - **Unauthorized payment requests** — "registration fees", "security deposits", "processing fees"
 - **Deceptive company identities** — visual character tricks like `rnicrosoft` mimicking `microsoft`
@@ -46,9 +46,9 @@ Students frequently encounter fraudulent internship solicitations that involve:
 
 Standard detection methods rely solely on keyword matching, which fails against sophisticated impersonation. VeriIntern AI addresses this gap with a multi-layer fusion approach that cross-references global knowledge bases and security markers.
 
-**Distribution of Internship Fraud Tactics (Observed Patterns):**
+**Distribution of Illegitimate Internship Tactics (Observed Patterns):**
 
-| Fraud Tactic | Frequency |
+| Tactic | Frequency |
 |:---|:---|
 | Payment Demands | 35% |
 | Fake Company Names | 25% |
@@ -60,7 +60,7 @@ Standard detection methods rely solely on keyword matching, which fails against 
 
 ## Objective
 
-- Develop a multi-source analytical framework for fraud detection
+- Develop a multi-source analytical framework for internship authenticity detection
 - Integrate ML-based linguistic predictions with external intelligence checks
 - Implement homoglyph and impersonation neutralization for visual character tricks
 - Provide a clear verdict, confidence score, and detailed explanation report
@@ -99,7 +99,7 @@ The system follows a 4-layer parallel analysis pipeline that feeds into a weight
                          |             |              |
                    +-----v-----+ +----v------+ +-----v-----------+
                    | Verdict:  | | Confidence| | Reasoning       |
-                   | FRAUD or  | | Percentage| | Report          |
+                   | SCAM or   | | Percentage| | Report          |
                    | LEGITIMATE| |           | |                 |
                    +-----------+ +-----------+ +-----------------+
 ```
@@ -125,7 +125,7 @@ Input Text --> Negation-Aware Parser --> Keyword Tier Classification
                     +-----+-----+------+------+------+-----+
                           |            |             |
                           v            v             v
-                    Tiered Score Computation --> ML Fraud Probability
+                    Tiered Score Computation --> Inauthenticity Probability
 ```
 
 **Keyword Tier Scoring:**
@@ -137,7 +137,7 @@ Input Text --> Negation-Aware Parser --> Keyword Tier Classification
 | Medium (pressure tactics) | 6 phrases | +0.06 to +0.20 | `limited seats`, `offer expires`, `guaranteed certificate` |
 | Legit Signals (legitimate indicators) | 16 phrases | -20% to -60% | `interview process`, `coding round`, `screening process` |
 
-**Negation Awareness:** The system distinguishes between `"Pay registration fee"` (fraud) and `"No registration fee"` (legitimate) by scanning a 25-character prefix window for negation words like `no`, `not`, `without`, `never`, `don't`.
+**Negation Awareness:** The system distinguishes between `"Pay registration fee"` (scam) and `"No registration fee"` (legitimate) by scanning a 25-character prefix window for negation words like `no`, `not`, `without`, `never`, `don't`.
 
 ---
 
@@ -254,7 +254,7 @@ The fusion engine combines all four layers using a priority-weighted system wher
 | Web Intelligence Agent | **50%** | Primary signal — validates global corporate footprint |
 | Identity Verification | **20%** | Detects impersonation, homoglyphs, and name tricks |
 | Network Safety | **15%** | Evaluates URL, domain, TLD, and WHOIS data |
-| ML Text Classification | **15%** | Identifies linguistic fraud patterns in offer text |
+| ML Text Classification | **15%** | Identifies linguistic scam patterns in offer text |
 
 ```
 Weight Distribution:
@@ -273,9 +273,9 @@ The system includes critical override logic for high-confidence scenarios:
 |:---|:---|:---|
 | Homoglyph Impersonation | Company score <= 0.05 | Force ML >= 0.85, Cap agent <= 0.10 |
 | Misspelled Company | Company score <= 0.10 | Force ML >= 0.75, Cap agent <= 0.25 |
-| Payment with Real Name | ML fraud >= 0.75 | Force agent fraud >= 0.70, Force company fraud >= 0.70 |
+| Payment with Real Name | ML scam score >= 0.75 | Force agent scam >= 0.70, Force company scam >= 0.70 |
 
-These overrides ensure that even when individual layers disagree (e.g., Wikipedia confirms "Google" exists, but the offer demands payment), the final verdict correctly reflects the fraud.
+These overrides ensure that even when individual layers disagree (e.g., Wikipedia confirms "Google" exists, but the offer demands payment), the final verdict correctly reflects the deception.
 
 ---
 
@@ -293,9 +293,9 @@ Submit Offer --> Preprocessing --> [ML Scan]      --> Weighted Score --> Final O
 1. User submits offer text, optional company name, and optional URL
 2. System auto-extracts company name and URL from text if not provided
 3. All four analysis layers run in sequence
-4. Scores are converted to fraud probabilities and fused with weights
+4. Scores are converted to inauthenticity probabilities and fused with weights
 5. Override rules are applied for high-confidence edge cases
-6. Final verdict (FRAUD/LEGITIMATE), confidence percentage, and reasoning report are returned
+6. Final verdict (SCAM/LEGITIMATE), confidence percentage, and reasoning report are returned
 
 ---
 
@@ -306,9 +306,9 @@ Example scenarios demonstrating the system's detection capabilities:
 | Scenario | ML Score | Company | URL | Agent | Verdict |
 |:---|:---|:---|:---|:---|:---|
 | Real company, legitimate offer | 0.00 | Verified (1.0) | Safe (1.0) | Confirmed (0.95) | **LEGITIMATE** |
-| Fake company, payment demands | 0.90 | Unknown (0.45) | Risky (0.35) | Not found (0.25) | **FRAUD** |
-| Real name + payment demand | 0.75 | Verified (1.0) | Safe (1.0) | Override (0.01) | **FRAUD** |
-| Homoglyph impersonation (`rnicrosoft`) | 0.85+ | Impersonation (0.02) | Unknown (0.60) | Override (0.10) | **FRAUD** |
+| Fake company, payment demands | 0.90 | Unknown (0.45) | Risky (0.35) | Not found (0.25) | **INAUTHENTIC** |
+| Real name + payment demand | 0.75 | Verified (1.0) | Safe (1.0) | Override (0.01) | **INAUTHENTIC** |
+| Homoglyph impersonation (`rnicrosoft`) | 0.85+ | Impersonation (0.02) | Unknown (0.60) | Override (0.10) | **INAUTHENTIC** |
 | Unknown company, clean language | 0.00 | Unverified (0.45) | No URL | Mixed (0.50) | **LEGITIMATE** |
 
 ---
@@ -360,7 +360,7 @@ VeriIntern-AI/
 
 ## Features
 
-- **4-Layer Prioritized Fraud Detection** — ML, identity, network, and web intelligence working in parallel
+- **4-Layer Prioritized Detection** — ML, identity, network, and web intelligence working in parallel
 - **ML Pipeline with TF-IDF** — Scikit-learn powered text classification with keyword fallback
 - **Homoglyph Impersonation Detection** — Catches tricks like `rnicrosoft`, `g00gle`, `vvipro`, and more
 - **Negation-Aware Keyword Matching** — Distinguishes "pay fee" from "no fee" using prefix scanning
@@ -418,11 +418,11 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-    "verdict": "FRAUD",
-    "is_fraud": true,
+    "verdict": "INAUTHENTIC",
+    "is_scam": true,
     "confidence_percent": 92.5,
     "component_scores": {
-        "ml_fraud_probability": 0.75,
+        "ml_scam_probability": 0.75,
         "agent_legitimacy": 0.01,
         "company_legitimacy": 1.0,
         "url_safety": 0.6
@@ -448,8 +448,8 @@ The test suite validates:
 | Homoglyph Detection | 7 | `rnicrosoft`, `g00gle`, `vvipro`, `1nfosys`, `micro$oft`, `d3loitte`, `@mazon` |
 | Fuzzy Impersonation | 2 | Typo-based impersonation (`Gogle`, `Microsft`) |
 | Verified Companies | 3 | Correct recognition of real companies |
-| Negation Awareness | 7 | Distinguishing fraud keywords vs. negated keywords |
-| ML Scoring | 4 | End-to-end fraud probability computation |
+| Negation Awareness | 7 | Distinguishing scam keywords vs. negated keywords |
+| ML Scoring | 4 | End-to-end inauthenticity probability computation |
 
 ---
 
@@ -457,16 +457,16 @@ The test suite validates:
 
 | Role | Name | Responsibility |
 |:---|:---|:---|
-| **Team Leader** | **Bala Sowndarya B** | Project leadership, coordination, and strategic direction |
-| **Developer** | **Mano Shruthi S** | Full-stack development, ML pipeline, and system architecture |
-| **Data Analyst** | **Kaviya Varshini S** | Data analysis, scoring validation, and performance metrics |
-| **Presenter** | **Kowsalya V** | Project presentation, documentation, and demonstration |
+| **Team Leader and Tester** | **Bala Sowndarya B** | Project guidance, team coordination, testing and quality assurance, problem solving, ideation, and development support |
+| **Developer** | **Mano Shruthi S** | Full-stack development of the entire web application, ML pipeline, backend architecture, and system implementation |
+| **Presenter and Data Collector** | **Kowsalya V** | Project presentation, data collection, and documentation |
+| **Presenter and Data Collector** | **Kaviya Varshini S** | Project presentation, data collection, and documentation |
 
 ---
 
 ## Conclusion
 
-VeriIntern AI provides a comprehensive and scalable analytical solution for neutralizing the threat of internship fraud. By fusing linguistic patterns with real-world web intelligence across four specialized detection layers, the system achieves high detection accuracy while minimizing false positives. The weighted fusion engine with override logic ensures that even sophisticated attacks — including homoglyph impersonation and payment-demanding scams using real company names — are reliably detected.
+VeriIntern AI provides a comprehensive and scalable analytical solution for neutralizing the threat of illegitimate internship offers. By fusing linguistic patterns with real-world web intelligence across four specialized detection layers, the system achieves high detection accuracy while minimizing false positives. The weighted fusion engine with override logic ensures that even sophisticated attacks — including homoglyph impersonation and payment-demanding scams using real company names — are reliably detected.
 
 This system creates a reliable and trustworthy environment for students navigating online career opportunities.
 
